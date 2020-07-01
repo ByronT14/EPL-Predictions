@@ -62,3 +62,8 @@ def simulate_match(home_goals_avg, away_goals_avg, max_goals=10):
     AwayProb = np.sum(np.triu(score_matrix,1))
     #[HomeProb,DrawProb,AwayProb]
     return pd.Series([HomeProb,DrawProb,AwayProb])
+
+def score_matrix(home_goals_avg, away_goals_avg, max_goals=10):
+    team_pred = [[poisson.pmf(i, team_avg) for i in range(0, max_goals+1)] for team_avg in [home_goals_avg, away_goals_avg]]
+    score_matrix = (np.outer(np.array(team_pred[0]), np.array(team_pred[1])))
+    return pd.DataFrame(score_matrix)
